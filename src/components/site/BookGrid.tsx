@@ -39,13 +39,15 @@ const TagBadges = ({ tags }: { tags: Book["tags"] }) => (
 const BookCard = ({ book, onOpen }: { book: Book; onOpen: () => void }) => (
   <Card className="group relative overflow-hidden transition-transform duration-300 hover:-translate-y-1">
     <CardContent className="p-0">
-      <div className="aspect-[3/4] w-full overflow-hidden">
-        <img
-          src={book.cover}
-          alt={`${book.title} by ${book.author} book cover`}
-          className="h-full w-full object-cover"
-          loading="lazy"
-        />
+      <div className="aspect-[3/4] w-full overflow-hidden bg-muted/40">
+        <div className="flex h-full w-full items-center justify-center p-3">
+          <img
+            src={book.cover}
+            alt={`${book.title} by ${book.author} book cover`}
+            className="max-h-full max-w-full object-contain drop-shadow-sm"
+            loading="lazy"
+          />
+        </div>
       </div>
       <div className="p-4 flex flex-col gap-3">
         <div className="flex items-center justify-between gap-3">
