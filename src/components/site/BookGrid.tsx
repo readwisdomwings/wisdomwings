@@ -105,19 +105,20 @@ const BookModal = ({ book, open, onOpenChange }: { book: Book; open: boolean; on
   </Dialog>
 );
 
-const BookGrid = () => {
+const BookGrid = ({ items, title = "Featured Books" }: { items?: Book[]; title?: string }) => {
   const [active, setActive] = useState<Book | null>(null);
+  const list = items ?? books;
 
   return (
     <section id="books" className="container mx-auto px-4 py-12 md:py-16">
       <div className="flex items-end justify-between gap-4 mb-6">
         <div>
-          <h2 className="text-3xl font-bold">Featured Books</h2>
+          <h2 className="text-3xl font-bold">{title}</h2>
           <p className="text-muted-foreground">A rotating shelf of community favourites and most-rented picks.</p>
         </div>
       </div>
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-        {books.map((b) => (
+        {list.map((b) => (
           <div key={b.id}>
             <BookCard book={b} onOpen={() => setActive(b)} />
           </div>

@@ -1,6 +1,6 @@
 import type React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { BookOpenCheck, ShieldCheck, Wallet } from "lucide-react";
+import { BookOpenCheck, MonitorOff, Wallet } from "lucide-react";
 
 const BenefitItem = ({
   icon: Icon,
@@ -42,9 +42,9 @@ const Benefits = () => {
           description="Fresh books weekly keep kids excited to read beyond screens."
         />
         <BenefitItem
-          icon={ShieldCheck}
-          title="Safe & cared for"
-          description="Small deposit ensures books come back in great condition."
+          icon={MonitorOff}
+          title="No screen time"
+          description="Encourage mindful, device-free moments with stories and pictures."
         />
         <BenefitItem
           icon={Wallet}
