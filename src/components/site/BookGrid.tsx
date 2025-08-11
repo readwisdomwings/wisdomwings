@@ -40,8 +40,8 @@ const TagBadges = ({ tags }: { tags: Book["tags"] }) => (
 const BookCard = ({ book, onOpen }: { book: Book; onOpen: () => void }) => (
   <Card className="group relative overflow-hidden transition-transform duration-300 hover:-translate-y-1">
     <CardContent className="p-0">
-      <div className="aspect-[3/4] w-full overflow-hidden bg-muted/40">
-        <div className="flex h-full w-full items-center justify-center p-3">
+      <div className="aspect-[2/3] w-full overflow-hidden bg-muted/40">
+        <div className="flex h-full w-full items-center justify-center p-2">
           <img
             src={book.cover}
             alt={`${book.title} by ${book.author} book cover`}

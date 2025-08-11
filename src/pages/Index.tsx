@@ -1,7 +1,10 @@
 import Header from "@/components/site/Header";
 import Hero from "@/components/site/Hero";
+import HeroBanner from "@/components/site/HeroBanner";
 import Benefits from "@/components/site/Benefits";
-import BookGrid from "@/components/site/BookGrid";
+import FeaturedBooks from "@/components/site/FeaturedBooks";
+import HowItWorks from "@/components/site/HowItWorks";
+import BookSeriesBanner from "@/components/site/BookSeriesBanner";
 import { Helmet } from "react-helmet-async";
 
 const Index = () => {
@@ -24,8 +27,11 @@ const Index = () => {
       </Helmet>
       <Header />
       <Hero />
+      <HeroBanner />
       <Benefits />
-      <BookGrid />
+      <FeaturedBooks />
+      <HowItWorks />
+      <BookSeriesBanner />
       <section id="contact" className="container mx-auto px-4 py-12 md:py-16">
         <div className="rounded-lg border p-6 md:p-8 bg-card">
           <h3 className="text-2xl font-semibold mb-2">Get in touch</h3>
