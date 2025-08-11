@@ -10,6 +10,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { ImageViewer } from "@/components/ui/image-viewer";
 
 const AvailabilityBadge = ({ available }: { available: boolean }) => (
   <Badge variant={available ? "success" : "destructive"}>
@@ -81,7 +82,11 @@ const BookModal = ({ book, open, onOpenChange }: { book: Book; open: boolean; on
         </DialogDescription>
       </DialogHeader>
       <div className="grid md:grid-cols-2 gap-4">
-        <img src={book.cover} alt={`${book.title} large cover`} className="rounded-md border w-full" />
+        <ImageViewer 
+          images={[book.cover]} 
+          alt={`${book.title} by ${book.author}`}
+          className="w-full"
+        />
         <div className="flex flex-col gap-3">
           <AvailabilityBadge available={book.available} />
           <TagBadges tags={book.tags} />
