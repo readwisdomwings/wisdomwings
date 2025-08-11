@@ -56,19 +56,7 @@ const HeroBanner = () => {
                   className="w-full h-full object-cover"
                   loading={index === 0 ? "eager" : "lazy"}
                 />
-                <div className="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent" />
-                <div className="absolute inset-0 flex items-center">
-                  <div className="container mx-auto px-4">
-                    <div className="max-w-2xl text-white">
-                      <h2 className="text-3xl md:text-5xl font-bold mb-4">
-                        {banner.title}
-                      </h2>
-                      <p className="text-lg md:text-xl opacity-90">
-                        {banner.description}
-                      </p>
-                    </div>
-                  </div>
-                </div>
+                
               </div>
             </CarouselItem>
           ))}
