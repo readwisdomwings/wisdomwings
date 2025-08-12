@@ -15,7 +15,6 @@ const Hero = () => {
           </p>
           <div className="flex flex-wrap gap-3">
             <a href="#books"><Button variant="hero">Explore Collection</Button></a>
-            <a href="#benefits"><Button variant="outline">Why it works</Button></a>
           </div>
         </div>
         <div className="relative">

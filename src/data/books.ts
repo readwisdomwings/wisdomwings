@@ -9,6 +9,9 @@ export type BookTag =
   | "Most Favourite"
   | "Frequently Rented"
   | "Most Popular"
+  | "Popular"
+  | "New"
+  | "Staff Favourite"
   | "STEM"
   | "Fantasy"
   | "Adventure"
@@ -50,7 +53,7 @@ export const books: Book[] = [
     deposit: 300,
     rentPerWeek: 50,
     ageGroup: "6–9",
-    tags: ["STEM", "Most Popular", "Adventure"],
+    tags: ["STEM", "Popular", "Adventure"],
     description:
       "Journey through the galaxy with two friends learning constellations, rockets and the wonder of space.",
   },
@@ -63,7 +66,7 @@ export const books: Book[] = [
     deposit: 250,
     rentPerWeek: 40,
     ageGroup: "4–7",
-    tags: ["Adventure", "Frequently Rented"],
+    tags: ["Adventure", "Staff Favourite"],
     description:
       "A playful romp with friendly dinosaurs discovering teamwork and curiosity in a colorful valley.",
   },
@@ -76,7 +79,7 @@ export const books: Book[] = [
     deposit: 250,
     rentPerWeek: 40,
     ageGroup: "3–6",
-    tags: ["Animals", "Most Popular"],
+    tags: ["Animals", "Popular"],
     description:
       "Meet dolphins, turtles and tiny seahorses while learning about caring for our blue planet.",
   },
@@ -102,7 +105,7 @@ export const books: Book[] = [
     deposit: 300,
     rentPerWeek: 50,
     ageGroup: "7–10",
-    tags: ["STEM", "Frequently Rented"],
+    tags: ["STEM", "New"],
     description:
       "Build, tinker and learn simple circuits with two curious kids and their helpful robot buddies.",
   },

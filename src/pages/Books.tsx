@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import Header from "@/components/site/Header";
 import BookGrid from "@/components/site/BookGrid";
+import WhatsAppFloat from "@/components/site/WhatsAppFloat";
 import { books, type Book, type BookTag } from "@/data/books";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
@@ -8,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Helmet } from "react-helmet-async";
 
 const CATEGORY_TAGS: BookTag[] = ["STEM", "Fantasy", "Adventure", "Animals"];
+const BOOKS_PER_PAGE = 20;
 
 const Books = () => {
   const availableCategories = CATEGORY_TAGS.filter((t) => books.some((b) => b.tags.includes(t)));
@@ -17,6 +19,7 @@ const Books = () => {
   const [category, setCategory] = useState<string>("All");
   const [age, setAge] = useState<string>("All Ages");
   const [maxRent, setMaxRent] = useState<number>(maxRentAll);
+  const [currentPage, setCurrentPage] = useState<number>(1);
 
   const filtered: Book[] = useMemo(() => {
     return books.filter((b) => {
@@ -27,16 +30,28 @@ const Books = () => {
     });
   }, [category, age, maxRent]);
 
+  const totalPages = Math.ceil(filtered.length / BOOKS_PER_PAGE);
+  const paginatedBooks = filtered.slice(
+    (currentPage - 1) * BOOKS_PER_PAGE,
+    currentPage * BOOKS_PER_PAGE
+  );
+
   const reset = () => {
     setCategory("All");
     setAge("All Ages");
     setMaxRent(maxRentAll);
+    setCurrentPage(1);
+  };
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
     <>
       <Helmet>
-        <title>Books | Book Buddy Loop</title>
+        <title>Books | WisdomWings</title>
         <meta name="description" content="Browse all children's books. Filter by category, age group and weekly rent. Kid-friendly, mobile-first library." />
         <link rel="canonical" href="/books" />
       </Helmet>
@@ -84,7 +99,15 @@ const Books = () => {
             </div>
           </div>
         </section>
-        <BookGrid items={filtered} title="All Books" />
+        <BookGrid 
+          items={paginatedBooks} 
+          title="All Books" 
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+          showPagination={true}
+        />
+        <WhatsAppFloat />
       </main>
     </>
   );

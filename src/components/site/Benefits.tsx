@@ -43,7 +43,7 @@ const Benefits = () => {
         />
         <BenefitItem
           icon={MonitorOff}
-          title="No screen time"
+          title="Reduce screen time"
           description="Encourage mindful, device-free moments with stories and pictures."
         />
         <BenefitItem

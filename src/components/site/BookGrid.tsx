@@ -1,137 +1,225 @@
 import { useState } from "react";
 import { books, type Book } from "@/data/books";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { ImageViewer } from "@/components/ui/image-viewer";
+import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
 
 const AvailabilityBadge = ({ available }: { available: boolean }) => (
-  <Badge variant={available ? "success" : "destructive"}>
-    {available ? "Available" : "Issued"}
+  <Badge variant={available ? "default" : "secondary"} className="mb-2">
+    {available ? "Available" : "Unavailable"}
   </Badge>
 );
 
-const TagBadges = ({ tags }: { tags: Book["tags"] }) => (
-  <div className="flex flex-wrap gap-2">
-    {tags.map((t) => {
-      const lower = t.toLowerCase();
-      const variant =
-        lower.includes("popular") || lower.includes("favourite")
-          ? ("info" as const)
-          : lower.includes("frequently")
-          ? ("warning" as const)
-          : ("secondary" as const);
-      return (
-        <Badge key={t} variant={variant} aria-label={`Tag: ${t}`}>
-          {t}
-        </Badge>
-      );
-    })}
+const TagBadges = ({ tags }: { tags: string[] }) => (
+  <div className="flex flex-wrap gap-1 mb-2">
+    {tags.map((tag, idx) => (
+      <Badge
+        key={idx}
+        variant={
+          tag === "Most Favourite"
+            ? "default"
+            : tag === "Popular"
+            ? "secondary"
+            : tag === "New"
+            ? "outline"
+            : "outline"
+        }
+        className="text-xs"
+      >
+        {tag}
+      </Badge>
+    ))}
   </div>
 );
 
-const BookCard = ({ book, onOpen }: { book: Book; onOpen: () => void }) => (
-  <Card className="group relative overflow-hidden transition-transform duration-300 hover:-translate-y-1">
-    <CardContent className="p-0">
-      <div className="aspect-[2/3] w-full overflow-hidden bg-muted/40">
-        <div className="flex h-full w-full items-center justify-center p-2">
-          <img
-            src={book.cover}
-            alt={`${book.title} by ${book.author} book cover`}
-            className="max-h-full max-w-full object-contain drop-shadow-sm"
-            loading="lazy"
-          />
-        </div>
+const BookCard = ({ book, onViewDetails }: { book: Book; onViewDetails: (book: Book) => void }) => (
+  <Card 
+    className="group relative cursor-pointer transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
+    onClick={() => onViewDetails(book)}
+  >
+    <CardHeader className="p-3 sm:p-4">
+      <img
+        src={book.cover}
+        alt={`Cover of ${book.title}`}
+        className="w-full aspect-[3/4] object-cover rounded-md mb-2"
+        loading="lazy"
+      />
+      <AvailabilityBadge available={book.available} />
+      <TagBadges tags={book.tags} />
+      <CardTitle className="text-sm font-semibold line-clamp-2">{book.title}</CardTitle>
+      <CardDescription className="text-xs text-muted-foreground">
+        by {book.author}
+      </CardDescription>
+    </CardHeader>
+    <CardContent className="p-3 sm:p-4 pt-0">
+      <div className="flex items-center justify-between mb-2">
+        <span className="text-sm font-medium">₹{book.rentPerWeek}/week</span>
+        <span className="text-xs text-muted-foreground">Deposit: ₹{book.deposit}</span>
       </div>
-      <div className="p-4 flex flex-col gap-3">
-        <div className="flex items-center justify-between gap-3">
-          <h3 className="font-semibold truncate" title={book.title}>
-            {book.title}
-          </h3>
-          <AvailabilityBadge available={book.available} />
-        </div>
-        <p className="text-sm text-muted-foreground">by {book.author} · Age {book.ageGroup}</p>
-        <TagBadges tags={book.tags} />
-        <div className="flex items-center justify-between pt-2">
-          <div className="text-sm text-muted-foreground">
-            <span className="font-medium text-foreground">₹{book.rentPerWeek}</span> / week · Deposit ₹{book.deposit}
-          </div>
-          <Button size="sm" onClick={onOpen} aria-label={`View details for ${book.title}`}>
-            Details
-          </Button>
-        </div>
-      </div>
+      <Button
+        onClick={(e) => {
+          e.stopPropagation();
+          onViewDetails(book);
+        }}
+        className="w-full text-xs h-8"
+        variant="outline"
+        aria-label={`View details for ${book.title}`}
+      >
+        Details
+      </Button>
     </CardContent>
   </Card>
 );
 
-const BookModal = ({ book, open, onOpenChange }: { book: Book; open: boolean; onOpenChange: (o: boolean) => void }) => (
-  <Dialog open={open} onOpenChange={onOpenChange}>
-    <DialogContent className="sm:max-w-xl">
-      <DialogHeader>
-        <DialogTitle>{book.title}</DialogTitle>
-        <DialogDescription>
-          {book.author} · Age {book.ageGroup}
-        </DialogDescription>
-      </DialogHeader>
-      <div className="grid md:grid-cols-2 gap-4">
-        <ImageViewer 
-          images={[book.cover]} 
-          alt={`${book.title} by ${book.author}`}
-          className="w-full"
-        />
-        <div className="flex flex-col gap-3">
-          <AvailabilityBadge available={book.available} />
-          <TagBadges tags={book.tags} />
-          <p className="text-sm text-muted-foreground">{book.description}</p>
-          <div className="mt-1 text-sm">
-            <div>
-              <span className="font-medium text-foreground">Deposit:</span> ₹{book.deposit} (100% refundable)
-            </div>
-            <div>
-              <span className="font-medium text-foreground">Rent:</span> ₹{book.rentPerWeek}/week
-            </div>
+const BookModal = ({ book, isOpen, onClose }: { book: Book | null; isOpen: boolean; onClose: () => void }) => {
+  const handleContactForRent = () => {
+    if (!book) return;
+    
+    const phoneNumber = "1234567890"; // Replace with actual number
+    const message = `I am interested in renting this book: "${book.title}". Can you pls help me with the request?`;
+    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+  };
+
+  if (!book) return null;
+
+  return (
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle className="text-xl font-bold">{book.title}</DialogTitle>
+          <DialogDescription className="text-sm text-muted-foreground">
+            by {book.author} • {book.ageGroup}
+          </DialogDescription>
+        </DialogHeader>
+        <div className="grid md:grid-cols-2 gap-6">
+          <div>
+            <ImageViewer images={[book.cover]} alt={`Cover of ${book.title}`} />
           </div>
-          <div className="pt-2">
-            <Button disabled={!book.available} aria-disabled={!book.available} className="w-full">
-              {book.available ? "Request This Book" : "Currently Issued"}
+          <div className="space-y-4">
+            <div>
+              <AvailabilityBadge available={book.available} />
+              <TagBadges tags={book.tags} />
+            </div>
+            <p className="text-sm leading-relaxed">{book.description}</p>
+            <div className="space-y-2">
+              <div className="flex justify-between">
+                <span className="font-medium">Age Range:</span>
+                <span>{book.ageGroup}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="font-medium">Weekly Rent:</span>
+                <span>₹{book.rentPerWeek}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="font-medium">Deposit:</span>
+                <span>₹{book.deposit}</span>
+              </div>
+            </div>
+            <Button 
+              className="w-full" 
+              onClick={handleContactForRent}
+              aria-label={`Contact for rent of ${book.title}`}
+            >
+              Contact for rent
             </Button>
           </div>
         </div>
-      </div>
-    </DialogContent>
-  </Dialog>
-);
+      </DialogContent>
+    </Dialog>
+  );
+};
 
-const BookGrid = ({ items, title = "Featured Books" }: { items?: Book[]; title?: string }) => {
-  const [active, setActive] = useState<Book | null>(null);
-  const list = items ?? books;
+interface BookGridProps {
+  items?: Book[];
+  title?: string;
+  currentPage?: number;
+  totalPages?: number;
+  onPageChange?: (page: number) => void;
+  showPagination?: boolean;
+}
+
+const BookGrid = ({ 
+  items = books, 
+  title = "Featured Books", 
+  currentPage = 1,
+  totalPages = 1,
+  onPageChange,
+  showPagination = false
+}: BookGridProps) => {
+  const [activeBook, setActiveBook] = useState<Book | null>(null);
 
   return (
-    <section id="books" className="container mx-auto px-4 py-12 md:py-16">
-      <div className="flex items-end justify-between gap-4 mb-6">
-        <div>
-          <h2 className="text-3xl font-bold">{title}</h2>
-          <p className="text-muted-foreground">A rotating shelf of community favourites and most-rented picks.</p>
-        </div>
-      </div>
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-        {list.map((b) => (
-          <div key={b.id}>
-            <BookCard book={b} onOpen={() => setActive(b)} />
-          </div>
+    <section className="container mx-auto px-4 py-8" id="books">
+      <h2 className="text-2xl font-bold text-center mb-8">{title}</h2>
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6">
+        {items.map((book) => (
+          <BookCard
+            key={book.id}
+            book={book}
+            onViewDetails={setActiveBook}
+          />
         ))}
       </div>
-      {active && (
-        <BookModal book={active} open={!!active} onOpenChange={(o) => !o && setActive(null)} />
+      
+      {showPagination && totalPages > 1 && (
+        <div className="mt-8 flex justify-center">
+          <Pagination>
+            <PaginationContent>
+              {currentPage > 1 && (
+                <PaginationItem>
+                  <PaginationPrevious 
+                    href="#" 
+                    onClick={(e) => {
+                      e.preventDefault();
+                      onPageChange?.(currentPage - 1);
+                    }}
+                    aria-label="Go to previous page"
+                  />
+                </PaginationItem>
+              )}
+              
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                <PaginationItem key={page}>
+                  <PaginationLink
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      onPageChange?.(page);
+                    }}
+                    isActive={page === currentPage}
+                    aria-label={`Go to page ${page}`}
+                  >
+                    {page}
+                  </PaginationLink>
+                </PaginationItem>
+              ))}
+              
+              {currentPage < totalPages && (
+                <PaginationItem>
+                  <PaginationNext 
+                    href="#" 
+                    onClick={(e) => {
+                      e.preventDefault();
+                      onPageChange?.(currentPage + 1);
+                    }}
+                    aria-label="Go to next page"
+                  />
+                </PaginationItem>
+              )}
+            </PaginationContent>
+          </Pagination>
+        </div>
       )}
+      
+      <BookModal
+        book={activeBook}
+        isOpen={!!activeBook}
+        onClose={() => setActiveBook(null)}
+      />
     </section>
   );
 };
