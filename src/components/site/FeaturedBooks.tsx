@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
-const CarouselSection = ({ title, books, category }: { title: string; books: Book[]; category: string }) => {
+const CarouselSection = ({ title, books, category, onViewDetails }: { title: string; books: Book[]; category: string; onViewDetails: (book: Book) => void }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const booksPerView = 4;
   const maxIndex = Math.max(0, books.length - booksPerView);
@@ -57,15 +57,49 @@ const CarouselSection = ({ title, books, category }: { title: string; books: Boo
       </div>
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         {visibleBooks.map((book) => (
-          <FeaturedBookCard key={book.id} book={book} />
+          <FeaturedBookCard key={book.id} book={book} onViewDetails={onViewDetails} />
         ))}
       </div>
     </div>
   );
 };
 
-const FeaturedBookCard = ({ book }: { book: Book }) => (
-  <Card className="group relative cursor-pointer transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
+const AvailabilityBadge = ({ available }: { available: boolean }) => (
+  <Badge 
+    variant="outline" 
+    className={`mb-2 ${available ? 'bg-green-100 text-green-800 border-green-300' : 'bg-orange-100 text-orange-800 border-orange-300'}`}
+  >
+    {available ? "Available" : "Unavailable"}
+  </Badge>
+);
+
+const TagBadges = ({ tags }: { tags: string[] }) => (
+  <div className="flex flex-wrap gap-1 mb-2">
+    {tags.map((tag, idx) => (
+      <Badge
+        key={idx}
+        variant={
+          tag === "Most Favourite"
+            ? "default"
+            : tag === "Popular"
+            ? "secondary"
+            : tag === "New"
+            ? "outline"
+            : "outline"
+        }
+        className="text-xs"
+      >
+        {tag}
+      </Badge>
+    ))}
+  </div>
+);
+
+const FeaturedBookCard = ({ book, onViewDetails }: { book: Book; onViewDetails: (book: Book) => void }) => (
+  <Card 
+    className="group relative cursor-pointer transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
+    onClick={() => onViewDetails(book)}
+  >
     <CardHeader className="p-3">
       <img
         src={book.cover}
@@ -73,37 +107,31 @@ const FeaturedBookCard = ({ book }: { book: Book }) => (
         className="w-full aspect-[3/4] object-cover rounded-md mb-2"
         loading="lazy"
       />
-      <div className="flex flex-wrap gap-1 mb-1">
-        {book.tags.slice(0, 2).map((tag, idx) => (
-          <Badge
-            key={idx}
-            variant={
-              tag === "Most Favourite"
-                ? "default"
-                : tag === "Popular"
-                ? "secondary"
-                : tag === "New"
-                ? "outline"
-                : "outline"
-            }
-            className="text-xs"
-          >
-            {tag}
-          </Badge>
-        ))}
-      </div>
-      <CardTitle className="text-sm font-semibold line-clamp-2">{book.title}</CardTitle>
-      <p className="text-xs text-muted-foreground">by {book.author}</p>
+      <CardTitle className="text-sm font-semibold line-clamp-2 mb-2">{book.title}</CardTitle>
+      <AvailabilityBadge available={book.available} />
+      <TagBadges tags={book.tags} />
     </CardHeader>
     <CardContent className="p-3 pt-0">
-      <div className="flex items-center justify-between">
-        <span className="text-sm font-medium">₹{book.rentPerWeek}/week</span>
+      <div className="flex items-center justify-between mb-3">
+        <span className="text-sm font-bold text-foreground">₹{book.rentPerWeek}/week</span>
+        <span className="text-xs text-muted-foreground">Deposit: ₹{book.deposit}</span>
       </div>
+      <Button
+        onClick={(e) => {
+          e.stopPropagation();
+          onViewDetails(book);
+        }}
+        className="w-full text-xs h-8"
+        variant="secondary"
+        aria-label={`View details for ${book.title}`}
+      >
+        Details
+      </Button>
     </CardContent>
   </Card>
 );
 
-const FeaturedBooks = () => {
+const FeaturedBooks = ({ onViewDetails }: { onViewDetails: (book: Book) => void }) => {
   const mostFavouriteBooks = books.filter(book => 
     book.tags.includes("Most Favourite")
   );
@@ -124,19 +152,22 @@ const FeaturedBooks = () => {
         <CarouselSection 
           title="Most Popular" 
           books={popularBooks} 
-          category="popular" 
+          category="popular"
+          onViewDetails={onViewDetails}
         />
         
         <CarouselSection 
           title="Staff Favourite" 
           books={staffFavouriteBooks} 
-          category="staff-favourite" 
+          category="staff-favourite"
+          onViewDetails={onViewDetails}
         />
         
         <CarouselSection 
           title="Most Favourite" 
           books={mostFavouriteBooks} 
-          category="most-favourite" 
+          category="most-favourite"
+          onViewDetails={onViewDetails}
         />
       </div>
     </section>

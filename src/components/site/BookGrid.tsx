@@ -8,7 +8,10 @@ import { ImageViewer } from "@/components/ui/image-viewer";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
 
 const AvailabilityBadge = ({ available }: { available: boolean }) => (
-  <Badge variant={available ? "default" : "secondary"} className="mb-2">
+  <Badge 
+    variant="outline" 
+    className={`mb-2 ${available ? 'bg-green-100 text-green-800 border-green-300' : 'bg-orange-100 text-orange-800 border-orange-300'}`}
+  >
     {available ? "Available" : "Unavailable"}
   </Badge>
 );
@@ -47,16 +50,13 @@ const BookCard = ({ book, onViewDetails }: { book: Book; onViewDetails: (book: B
         className="w-full aspect-[3/4] object-cover rounded-md mb-2"
         loading="lazy"
       />
+      <CardTitle className="text-sm font-semibold line-clamp-2 mb-2">{book.title}</CardTitle>
       <AvailabilityBadge available={book.available} />
       <TagBadges tags={book.tags} />
-      <CardTitle className="text-sm font-semibold line-clamp-2">{book.title}</CardTitle>
-      <CardDescription className="text-xs text-muted-foreground">
-        by {book.author}
-      </CardDescription>
     </CardHeader>
     <CardContent className="p-3 sm:p-4 pt-0">
-      <div className="flex items-center justify-between mb-2">
-        <span className="text-sm font-medium">₹{book.rentPerWeek}/week</span>
+      <div className="flex items-center justify-between mb-3">
+        <span className="text-sm font-bold text-foreground">₹{book.rentPerWeek}/week</span>
         <span className="text-xs text-muted-foreground">Deposit: ₹{book.deposit}</span>
       </div>
       <Button
@@ -65,7 +65,7 @@ const BookCard = ({ book, onViewDetails }: { book: Book; onViewDetails: (book: B
           onViewDetails(book);
         }}
         className="w-full text-xs h-8"
-        variant="outline"
+        variant="secondary"
         aria-label={`View details for ${book.title}`}
       >
         Details
