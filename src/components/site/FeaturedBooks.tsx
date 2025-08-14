@@ -66,8 +66,7 @@ const CarouselSection = ({ title, books, category, onViewDetails }: { title: str
 
 const AvailabilityBadge = ({ available }: { available: boolean }) => (
   <Badge 
-    variant="outline" 
-    className={`mb-2 ${available ? 'bg-green-100 text-green-800 border-green-300' : 'bg-orange-100 text-orange-800 border-orange-300'}`}
+    className={`mb-2 inline-flex w-fit ${available ? 'bg-green-500 text-white' : 'bg-orange-500 text-white'}`}
   >
     {available ? "Available" : "Unavailable"}
   </Badge>
@@ -78,16 +77,7 @@ const TagBadges = ({ tags }: { tags: string[] }) => (
     {tags.map((tag, idx) => (
       <Badge
         key={idx}
-        variant={
-          tag === "Most Favourite"
-            ? "default"
-            : tag === "Popular"
-            ? "secondary"
-            : tag === "New"
-            ? "outline"
-            : "outline"
-        }
-        className="text-xs"
+        className="text-xs bg-white text-gray-700 border border-gray-300"
       >
         {tag}
       </Badge>
@@ -113,7 +103,7 @@ const FeaturedBookCard = ({ book, onViewDetails }: { book: Book; onViewDetails: 
     </CardHeader>
     <CardContent className="p-3 pt-0">
       <div className="flex items-center justify-between mb-3">
-        <span className="text-sm font-bold text-foreground">₹{book.rentPerWeek}/week</span>
+        <span className="text-sm text-foreground">Rent: <span className="font-bold">₹{book.rentPerWeek}/week</span></span>
         <span className="text-xs text-muted-foreground">Deposit: ₹{book.deposit}</span>
       </div>
       <Button
@@ -121,7 +111,7 @@ const FeaturedBookCard = ({ book, onViewDetails }: { book: Book; onViewDetails: 
           e.stopPropagation();
           onViewDetails(book);
         }}
-        className="w-full text-xs h-8"
+        className="w-full text-xs h-8 border border-gray-300"
         variant="secondary"
         aria-label={`View details for ${book.title}`}
       >

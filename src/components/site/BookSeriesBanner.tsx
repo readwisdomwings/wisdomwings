@@ -25,9 +25,9 @@ const BookSeriesBanner = () => {
               className="bg-white dark:bg-card rounded-lg p-4 md:p-6 text-center shadow-sm hover:shadow-md transition-shadow duration-300 border"
             >
               <div className="aspect-square bg-gradient-to-br from-primary/10 to-accent/10 rounded-lg flex items-center justify-center mb-3">
-                <span className="text-xs md:text-sm font-bold text-center leading-tight px-2">
-                  {serie.logo}
-                </span>
+                <div className="w-12 h-12 bg-muted rounded flex items-center justify-center">
+                  <span className="text-xs font-bold text-muted-foreground">IMG</span>
+                </div>
               </div>
               <p className="text-xs text-muted-foreground font-medium">
                 {serie.name}

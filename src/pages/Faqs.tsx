@@ -43,7 +43,7 @@ const Faqs = () => {
         <section className="container mx-auto px-4 py-12 md:py-16">
           <h1 className="text-3xl font-bold mb-4">Frequently Asked Questions</h1>
           <p className="text-muted-foreground mb-6">Quick answers for parents in our society community.</p>
-          <Accordion type="single" collapsible className="w-full max-w-2xl">
+          <Accordion type="multiple" defaultValue={faqs.map((_, i) => `item-${i}`)} className="w-full max-w-2xl">
             {faqs.map((f, i) => (
               <AccordionItem key={i} value={`item-${i}`}>
                 <AccordionTrigger>{f.q}</AccordionTrigger>

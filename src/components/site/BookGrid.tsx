@@ -9,8 +9,7 @@ import { Pagination, PaginationContent, PaginationItem, PaginationLink, Paginati
 
 const AvailabilityBadge = ({ available }: { available: boolean }) => (
   <Badge 
-    variant="outline" 
-    className={`mb-2 ${available ? 'bg-green-100 text-green-800 border-green-300' : 'bg-orange-100 text-orange-800 border-orange-300'}`}
+    className={`mb-2 inline-flex w-fit ${available ? 'bg-green-500 text-white' : 'bg-orange-500 text-white'}`}
   >
     {available ? "Available" : "Unavailable"}
   </Badge>
@@ -21,16 +20,7 @@ const TagBadges = ({ tags }: { tags: string[] }) => (
     {tags.map((tag, idx) => (
       <Badge
         key={idx}
-        variant={
-          tag === "Most Favourite"
-            ? "default"
-            : tag === "Popular"
-            ? "secondary"
-            : tag === "New"
-            ? "outline"
-            : "outline"
-        }
-        className="text-xs"
+        className="text-xs bg-white text-gray-700 border border-gray-300"
       >
         {tag}
       </Badge>
@@ -56,7 +46,7 @@ const BookCard = ({ book, onViewDetails }: { book: Book; onViewDetails: (book: B
     </CardHeader>
     <CardContent className="p-3 sm:p-4 pt-0">
       <div className="flex items-center justify-between mb-3">
-        <span className="text-sm font-bold text-foreground">₹{book.rentPerWeek}/week</span>
+        <span className="text-sm text-foreground">Rent: <span className="font-bold">₹{book.rentPerWeek}/week</span></span>
         <span className="text-xs text-muted-foreground">Deposit: ₹{book.deposit}</span>
       </div>
       <Button
@@ -64,7 +54,7 @@ const BookCard = ({ book, onViewDetails }: { book: Book; onViewDetails: (book: B
           e.stopPropagation();
           onViewDetails(book);
         }}
-        className="w-full text-xs h-8"
+        className="w-full text-xs h-8 border border-gray-300"
         variant="secondary"
         aria-label={`View details for ${book.title}`}
       >
@@ -96,7 +86,21 @@ const BookModal = ({ book, isOpen, onClose }: { book: Book | null; isOpen: boole
           </DialogDescription>
         </DialogHeader>
         <div className="grid md:grid-cols-2 gap-6">
-          <div>
+          <div className="space-y-4">
+            <div className="flex gap-2 mb-3">
+              <button 
+                className="px-3 py-1 text-xs border rounded bg-primary text-primary-foreground"
+                onClick={() => {/* Handle cover view */}}
+              >
+                Cover
+              </button>
+              <button 
+                className="px-3 py-1 text-xs border rounded bg-muted text-muted-foreground"
+                onClick={() => {/* Handle inner page view */}}
+              >
+                Inner Page
+              </button>
+            </div>
             <ImageViewer images={[book.cover]} alt={`Cover of ${book.title}`} />
           </div>
           <div className="space-y-4">
@@ -106,17 +110,10 @@ const BookModal = ({ book, isOpen, onClose }: { book: Book | null; isOpen: boole
             </div>
             <p className="text-sm leading-relaxed">{book.description}</p>
             <div className="space-y-2">
-              <div className="flex justify-between">
-                <span className="font-medium">Age Range:</span>
-                <span>{book.ageGroup}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="font-medium">Weekly Rent:</span>
-                <span>₹{book.rentPerWeek}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="font-medium">Deposit:</span>
-                <span>₹{book.deposit}</span>
+              <div className="text-sm text-muted-foreground">Age Range: {book.ageGroup}</div>
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-foreground">Rent: <span className="font-bold">₹{book.rentPerWeek}/week</span></span>
+                <span className="text-xs text-muted-foreground">Deposit: ₹{book.deposit}</span>
               </div>
             </div>
             <Button 

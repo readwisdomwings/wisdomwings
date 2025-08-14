@@ -52,10 +52,6 @@ const HowItWorks = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
         {steps.map((step, index) => (
           <div key={step.id} className="relative">
-            {/* Connector line for larger screens */}
-            {index < steps.length - 1 && (
-              <div className="hidden lg:block absolute top-20 left-full w-full h-0.5 bg-gradient-to-r from-primary/50 to-transparent z-0" />
-            )}
             
             <div className="relative z-10 text-center">
               {/* Step number */}
@@ -63,20 +59,15 @@ const HowItWorks = () => {
                 {step.id}
               </div>
               
-              {/* Image */}
-              <div className="w-32 h-32 mx-auto mb-4 rounded-2xl overflow-hidden bg-muted/20">
-                <img
-                  src={step.image}
-                  alt={step.title}
-                  className="w-full h-full object-cover"
-                  loading="lazy"
-                />
+              {/* Icon */}
+              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center">
+                <step.icon className="w-8 h-8 text-primary" aria-label={step.title} />
               </div>
               
-              {/* Icon */}
-              <div className={`w-8 h-8 mx-auto mb-3 ${step.color}`}>
-                <step.icon className="w-full h-full" />
-              </div>
+              {/* Arrow connector for larger screens */}
+              {index < steps.length - 1 && (
+                <div className="hidden lg:block absolute top-12 left-[calc(100%+2rem)] w-8 h-0.5 bg-gradient-to-r from-primary to-transparent" />
+              )}
               
               {/* Content */}
               <h3 className="text-xl font-semibold mb-2">{step.title}</h3>
@@ -92,10 +83,10 @@ const HowItWorks = () => {
       <div className="text-center mt-12">
         <div className="inline-flex flex-col sm:flex-row gap-3">
           <a
-            href="#books"
+            href="/books"
             className="inline-flex items-center justify-center rounded-md bg-primary px-6 py-3 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90"
           >
-            Start Browsing Books
+            Explore Collection
           </a>
           <a
             href="#contact"

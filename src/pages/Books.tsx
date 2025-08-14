@@ -14,21 +14,28 @@ const BOOKS_PER_PAGE = 20;
 const Books = () => {
   const availableCategories = CATEGORY_TAGS.filter((t) => books.some((b) => b.tags.includes(t)));
   const ageOptions = Array.from(new Set(books.map((b) => b.ageGroup)));
-  const maxRentAll = Math.max(...books.map((b) => b.rentPerWeek));
 
   const [category, setCategory] = useState<string>("All");
   const [age, setAge] = useState<string>("All Ages");
-  const [maxRent, setMaxRent] = useState<number>(maxRentAll);
+  const [sortBy, setSortBy] = useState<string>("default");
   const [currentPage, setCurrentPage] = useState<number>(1);
 
   const filtered: Book[] = useMemo(() => {
-    return books.filter((b) => {
+    let result = books.filter((b) => {
       const catOk = category === "All" || b.tags.includes(category as BookTag);
       const ageOk = age === "All Ages" || b.ageGroup === age;
-      const rentOk = b.rentPerWeek <= maxRent;
-      return catOk && ageOk && rentOk;
+      return catOk && ageOk;
     });
-  }, [category, age, maxRent]);
+
+    // Apply sorting
+    if (sortBy === "name-asc") {
+      result = result.sort((a, b) => a.title.localeCompare(b.title));
+    } else if (sortBy === "name-desc") {
+      result = result.sort((a, b) => b.title.localeCompare(a.title));
+    }
+
+    return result;
+  }, [category, age, sortBy]);
 
   const totalPages = Math.ceil(filtered.length / BOOKS_PER_PAGE);
   const paginatedBooks = filtered.slice(
@@ -39,7 +46,7 @@ const Books = () => {
   const reset = () => {
     setCategory("All");
     setAge("All Ages");
-    setMaxRent(maxRentAll);
+    setSortBy("default");
     setCurrentPage(1);
   };
 
@@ -90,8 +97,17 @@ const Books = () => {
                 </Select>
               </div>
               <div>
-                <label className="block text-sm font-medium mb-2">Max Rent / week: ₹{maxRent}</label>
-                <Slider value={[maxRent]} onValueChange={(v) => setMaxRent(v[0] ?? maxRent)} max={maxRentAll} min={Math.min(...books.map((b) => b.rentPerWeek))} step={5} />
+                <label className="block text-sm font-medium mb-2">Sort by</label>
+                <Select value={sortBy} onValueChange={setSortBy}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Default" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="default">Default</SelectItem>
+                    <SelectItem value="name-asc">Book Name (A to Z)</SelectItem>
+                    <SelectItem value="name-desc">Book Name (Z to A)</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
             </div>
             <div className="mt-4 flex justify-end">
