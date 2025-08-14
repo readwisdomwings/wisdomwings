@@ -54,11 +54,6 @@ const HowItWorks = () => {
           <div key={step.id} className="relative">
             
             <div className="relative z-10 text-center">
-              {/* Step number */}
-              <div className="w-12 h-12 mx-auto mb-4 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-xl font-bold">
-                {step.id}
-              </div>
-              
               {/* Icon */}
               <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center">
                 <step.icon className="w-8 h-8 text-primary" aria-label={step.title} />

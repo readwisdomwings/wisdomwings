@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import Header from "@/components/site/Header";
 import BookGrid from "@/components/site/BookGrid";
 import WhatsAppFloat from "@/components/site/WhatsAppFloat";
@@ -8,7 +8,7 @@ import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
 import { Helmet } from "react-helmet-async";
 
-const CATEGORY_TAGS: BookTag[] = ["STEM", "Fantasy", "Adventure", "Animals"];
+const CATEGORY_TAGS: BookTag[] = ["Most Favourite", "Popular", "Staff Favourite", "STEM", "Fantasy", "Adventure", "Animals"];
 const BOOKS_PER_PAGE = 20;
 
 const Books = () => {
@@ -19,6 +19,27 @@ const Books = () => {
   const [age, setAge] = useState<string>("All Ages");
   const [sortBy, setSortBy] = useState<string>("default");
   const [currentPage, setCurrentPage] = useState<number>(1);
+
+  // Handle URL category parameter
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const categoryParam = urlParams.get('category');
+    if (categoryParam) {
+      switch(categoryParam) {
+        case 'popular':
+          setCategory('Popular');
+          break;
+        case 'staff-favourite':
+          setCategory('Staff Favourite');
+          break;
+        case 'most-favourite':
+          setCategory('Most Favourite');
+          break;
+        default:
+          setCategory('All');
+      }
+    }
+  }, []);
 
   const filtered: Book[] = useMemo(() => {
     let result = books.filter((b) => {
