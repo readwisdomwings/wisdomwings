@@ -5,7 +5,6 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { ImageViewer } from "@/components/ui/image-viewer";
-import innerPageSample from "@/assets/book-inner-page-sample.jpg";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
 
 const AvailabilityBadge = ({ available }: { available: boolean }) => (
@@ -21,7 +20,7 @@ const TagBadges = ({ tags }: { tags: string[] }) => (
     {tags.map((tag, idx) => (
       <Badge
         key={idx}
-        className="text-xs bg-white text-gray-700 border border-gray-300 hover:bg-white hover:text-gray-700"
+        className="text-xs bg-white text-gray-700 border border-gray-300"
       >
         {tag}
       </Badge>
@@ -66,8 +65,6 @@ const BookCard = ({ book, onViewDetails }: { book: Book; onViewDetails: (book: B
 );
 
 const BookModal = ({ book, isOpen, onClose }: { book: Book | null; isOpen: boolean; onClose: () => void }) => {
-  const [viewMode, setViewMode] = useState<'cover' | 'inner'>('cover');
-  
   const handleContactForRent = () => {
     if (!book) return;
     
@@ -92,22 +89,19 @@ const BookModal = ({ book, isOpen, onClose }: { book: Book | null; isOpen: boole
           <div className="space-y-4">
             <div className="flex gap-2 mb-3">
               <button 
-                className={`px-3 py-1 text-xs border rounded ${viewMode === 'cover' ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'}`}
-                onClick={() => setViewMode('cover')}
+                className="px-3 py-1 text-xs border rounded bg-primary text-primary-foreground"
+                onClick={() => {/* Handle cover view */}}
               >
                 Cover
               </button>
               <button 
-                className={`px-3 py-1 text-xs border rounded ${viewMode === 'inner' ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'}`}
-                onClick={() => setViewMode('inner')}
+                className="px-3 py-1 text-xs border rounded bg-muted text-muted-foreground"
+                onClick={() => {/* Handle inner page view */}}
               >
                 Inner Page
               </button>
             </div>
-            <ImageViewer 
-              images={[viewMode === 'cover' ? book.cover : innerPageSample]} 
-              alt={viewMode === 'cover' ? `Cover of ${book.title}` : `Inner page of ${book.title}`} 
-            />
+            <ImageViewer images={[book.cover]} alt={`Cover of ${book.title}`} />
           </div>
           <div className="space-y-4">
             <div>

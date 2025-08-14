@@ -50,12 +50,12 @@ const CarouselSection = ({ title, books, category, onViewDetails }: { title: str
               </Button>
             </>
           )}
-          <Link to={`/books?category=${category}`}>
+          <Link to="/books">
             <Button variant="outline" size="sm">View All</Button>
           </Link>
         </div>
       </div>
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         {visibleBooks.map((book) => (
           <FeaturedBookCard key={book.id} book={book} onViewDetails={onViewDetails} />
         ))}
@@ -77,7 +77,7 @@ const TagBadges = ({ tags }: { tags: string[] }) => (
     {tags.map((tag, idx) => (
       <Badge
         key={idx}
-        className="text-xs bg-white text-gray-700 border border-gray-300 hover:bg-white hover:text-gray-700"
+        className="text-xs bg-white text-gray-700 border border-gray-300"
       >
         {tag}
       </Badge>
@@ -90,7 +90,7 @@ const FeaturedBookCard = ({ book, onViewDetails }: { book: Book; onViewDetails: 
     className="group relative cursor-pointer transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
     onClick={() => onViewDetails(book)}
   >
-    <CardHeader className="p-3 sm:p-4">
+    <CardHeader className="p-3">
       <img
         src={book.cover}
         alt={`Cover of ${book.title}`}
@@ -101,7 +101,7 @@ const FeaturedBookCard = ({ book, onViewDetails }: { book: Book; onViewDetails: 
       <AvailabilityBadge available={book.available} />
       <TagBadges tags={book.tags} />
     </CardHeader>
-    <CardContent className="p-3 sm:p-4 pt-0">
+    <CardContent className="p-3 pt-0">
       <div className="flex items-center justify-between mb-3">
         <span className="text-sm text-foreground">Rent: <span className="font-bold">₹{book.rentPerWeek}/week</span></span>
         <span className="text-xs text-muted-foreground">Deposit: ₹{book.deposit}</span>
