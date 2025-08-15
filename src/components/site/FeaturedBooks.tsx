@@ -86,69 +86,41 @@ const TagBadges = ({ tags }: { tags: string[] }) => (
   </div>
 );
 
-const FeaturedBookCard = ({ book, onViewDetails }: { book: Book; onViewDetails: (book: Book) => void }) => {
-  const [viewMode, setViewMode] = useState<'cover' | 'inner'>('cover');
-  // In a real implementation, this would come from Google Sheets data
-  const hasInnerPage = true; // This could be controlled via Google Sheets
-
-  return (
-    <Card 
-      className="group relative cursor-pointer transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
-      onClick={() => onViewDetails(book)}
-    >
-      <CardHeader className="p-3 sm:p-4">
-        {hasInnerPage && (
-          <div className="flex gap-1 mb-2">
-            <button 
-              className={`px-2 py-1 text-xs rounded ${viewMode === 'cover' ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'}`}
-              onClick={(e) => {
-                e.stopPropagation();
-                setViewMode('cover');
-              }}
-            >
-              Cover
-            </button>
-            <button 
-              className={`px-2 py-1 text-xs rounded ${viewMode === 'inner' ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'}`}
-              onClick={(e) => {
-                e.stopPropagation();
-                setViewMode('inner');
-              }}
-            >
-              Inner Page
-            </button>
-          </div>
-        )}
-        <img
-          src={viewMode === 'cover' ? book.cover : innerPageSample}
-          alt={viewMode === 'cover' ? `Cover of ${book.title}` : `Inner page of ${book.title}`}
-          className="w-full aspect-[3/4] object-cover rounded-md mb-2"
-          loading="lazy"
-        />
-        <CardTitle className="text-sm font-semibold line-clamp-2 mb-2">{book.title}</CardTitle>
-        <AvailabilityBadge available={book.available} />
-        <TagBadges tags={book.tags} />
-      </CardHeader>
-      <CardContent className="p-3 sm:p-4 pt-0">
-        <div className="flex items-center justify-between mb-3">
-          <span className="text-sm text-foreground">Rent: <span className="font-bold">₹{book.rentPerWeek}/week</span></span>
-          <span className="text-xs text-muted-foreground">Deposit: ₹{book.deposit}</span>
-        </div>
-        <Button
-          onClick={(e) => {
-            e.stopPropagation();
-            onViewDetails(book);
-          }}
-          className="w-full text-xs h-8 border border-gray-300"
-          variant="secondary"
-          aria-label={`View details for ${book.title}`}
-        >
-          Details
-        </Button>
-      </CardContent>
-    </Card>
-  );
-};
+const FeaturedBookCard = ({ book, onViewDetails }: { book: Book; onViewDetails: (book: Book) => void }) => (
+  <Card 
+    className="group relative cursor-pointer transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
+    onClick={() => onViewDetails(book)}
+  >
+    <CardHeader className="p-3 sm:p-4">
+      <img
+        src={book.cover}
+        alt={`Cover of ${book.title}`}
+        className="w-full aspect-[3/4] object-cover rounded-md mb-2"
+        loading="lazy"
+      />
+      <CardTitle className="text-sm font-semibold line-clamp-2 mb-2">{book.title}</CardTitle>
+      <AvailabilityBadge available={book.available} />
+      <TagBadges tags={book.tags} />
+    </CardHeader>
+    <CardContent className="p-3 sm:p-4 pt-0">
+      <div className="flex items-center justify-between mb-3">
+        <span className="text-sm text-foreground">Rent: <span className="font-bold">₹{book.rentPerWeek}/week</span></span>
+        <span className="text-xs text-muted-foreground">Deposit: ₹{book.deposit}</span>
+      </div>
+      <Button
+        onClick={(e) => {
+          e.stopPropagation();
+          onViewDetails(book);
+        }}
+        className="w-full text-xs h-8 border border-gray-300"
+        variant="secondary"
+        aria-label={`View details for ${book.title}`}
+      >
+        Details
+      </Button>
+    </CardContent>
+  </Card>
+);
 
 const FeaturedBooks = ({ onViewDetails }: { onViewDetails: (book: Book) => void }) => {
   const mostFavouriteBooks = books.filter(book => 

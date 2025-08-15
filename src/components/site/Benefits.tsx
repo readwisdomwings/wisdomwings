@@ -14,7 +14,7 @@ const BenefitItem = ({
   <Card className="h-full">
     <CardHeader>
       <div className="flex items-center gap-3">
-        <div className="h-10 w-10 rounded-md bg-primary flex items-center justify-center text-primary-foreground">
+        <div className="h-10 w-10 rounded-md bg-hero-gradient flex items-center justify-center text-primary-foreground">
           <Icon className="h-5 w-5" aria-label={title} />
         </div>
         <CardTitle className="text-xl">{title}</CardTitle>
