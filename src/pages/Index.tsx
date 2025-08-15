@@ -140,7 +140,7 @@ const Index = () => {
       <section id="contact" className="container mx-auto px-4 py-12 md:py-16">
         <div className="rounded-lg border p-6 md:p-8 bg-card">
           <h3 className="text-2xl font-semibold mb-2">Get in touch</h3>
-          <p className="text-muted-foreground">We're starting within our society. Interested to rent or partner? Reach out and we'll message you on WhatsApp.</p>
+          <p className="text-muted-foreground">We're starting within our society. Interested to rent? Reach out and we'll message you on WhatsApp.</p>
           <div className="mt-4 text-sm">
             <div>Email: <a className="text-primary underline-offset-4 hover:underline" href="mailto:hello@wisdomwings.local">hello@wisdomwings.local</a></div>
             <div>WhatsApp: <span className="text-muted-foreground">Share your flat no. and we'll connect.</span></div>
