@@ -12,11 +12,11 @@ import { ImageViewer } from "@/components/ui/image-viewer";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { type Book } from "@/data/books";
+import innerPageSample from "@/assets/book-inner-page-sample.jpg";
 
 const AvailabilityBadge = ({ available }: { available: boolean }) => (
   <Badge 
-    variant="outline" 
-    className={`mb-2 ${available ? 'bg-green-100 text-green-800 border-green-300' : 'bg-orange-100 text-orange-800 border-orange-300'}`}
+    className={`mb-2 inline-flex w-fit rounded-full px-2 py-1 ${available ? 'bg-green-500 text-white' : 'bg-orange-500 text-white'}`}
   >
     {available ? "Available" : "Unavailable"}
   </Badge>
@@ -27,16 +27,7 @@ const TagBadges = ({ tags }: { tags: string[] }) => (
     {tags.map((tag, idx) => (
       <Badge
         key={idx}
-        variant={
-          tag === "Most Favourite"
-            ? "default"
-            : tag === "Popular"
-            ? "secondary"
-            : tag === "New"
-            ? "outline"
-            : "outline"
-        }
-        className="text-xs"
+        className="text-xs bg-white text-gray-700 border border-gray-300 rounded-full px-2 py-1"
       >
         {tag}
       </Badge>
@@ -45,6 +36,8 @@ const TagBadges = ({ tags }: { tags: string[] }) => (
 );
 
 const BookModal = ({ book, isOpen, onClose }: { book: Book | null; isOpen: boolean; onClose: () => void }) => {
+  const [viewMode, setViewMode] = useState<'cover' | 'inner'>('cover');
+  
   const handleContactForRent = () => {
     if (!book) return;
     
@@ -66,8 +59,25 @@ const BookModal = ({ book, isOpen, onClose }: { book: Book | null; isOpen: boole
           </DialogDescription>
         </DialogHeader>
         <div className="grid md:grid-cols-2 gap-6">
-          <div>
-            <ImageViewer images={[book.cover]} alt={`Cover of ${book.title}`} />
+          <div className="space-y-4">
+            <div className="flex gap-2 mb-3">
+              <button 
+                className={`px-3 py-1 text-xs border rounded ${viewMode === 'cover' ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'}`}
+                onClick={() => setViewMode('cover')}
+              >
+                Cover
+              </button>
+              <button 
+                className={`px-3 py-1 text-xs border rounded ${viewMode === 'inner' ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'}`}
+                onClick={() => setViewMode('inner')}
+              >
+                Inner Page
+              </button>
+            </div>
+            <ImageViewer 
+              images={[viewMode === 'cover' ? book.cover : innerPageSample]} 
+              alt={viewMode === 'cover' ? `Cover of ${book.title}` : `Inner page of ${book.title}`} 
+            />
           </div>
           <div className="space-y-4">
             <div>
@@ -75,19 +85,10 @@ const BookModal = ({ book, isOpen, onClose }: { book: Book | null; isOpen: boole
               <TagBadges tags={book.tags} />
             </div>
             <p className="text-sm leading-relaxed">{book.description}</p>
-            <div className="space-y-2">
-              <div className="flex justify-between">
-                <span className="font-medium">Age Range:</span>
-                <span>{book.ageGroup}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="font-medium">Weekly Rent:</span>
-                <span>₹{book.rentPerWeek}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="font-medium">Deposit:</span>
-                <span>₹{book.deposit}</span>
-              </div>
+            <div className="text-xs text-muted-foreground mb-2">Age Range: {book.ageGroup}</div>
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-sm text-foreground">Rent: <span className="font-bold">₹{book.rentPerWeek}/week</span></span>
+              <span className="text-xs text-muted-foreground">Deposit: ₹{book.deposit}</span>
             </div>
             <Button 
               className="w-full" 

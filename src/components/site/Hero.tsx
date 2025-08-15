@@ -14,7 +14,7 @@ const Hero = () => {
             A friendly, community-powered kids library. Small refundable deposit, low weekly rent, lots of joy.
           </p>
           <div className="flex flex-wrap gap-3">
-            <a href="#books"><Button variant="hero">Explore Collection</Button></a>
+            <a href="/books"><Button variant="default">Explore Collection</Button></a>
           </div>
         </div>
         <div className="relative">
